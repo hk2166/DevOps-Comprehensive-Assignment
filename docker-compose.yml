@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:443"
+    environment:
+      - MONGO_URI=mongodb://mongo:5173/mydatabase
+      - PORT=443
+    depends_on:
+      - mongo
+    container_name: backend
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    container_name: frontend
+
+  mongo:
+    image: mongo
+    command: --port 5173
+    ports:
+      - "22:5173"
+    container_name: mongo
